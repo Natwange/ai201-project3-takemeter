@@ -137,6 +137,119 @@ Comments whose primary purpose is hype, celebration, or emotional expression are
 
 ---
 
-# Dataset Scope
+# Data Collection Plan
 
-The dataset will consist of **comments from r/nba** rather than posts. Many r/nba posts are news headlines, injury updates, or quotes, whereas comments contain richer discourse and naturally exhibit the distinctions between **Analysis**, **Opinion**, and **Reaction**.
+## Source
+
+Examples will be collected from **comments on r/nba**. Comments are preferred over posts because many posts are simply news headlines, injury updates, or quotes, whereas comments contain richer discourse and naturally exhibit the distinctions between **Analysis**, **Opinion**, and **Reaction**.
+
+## Target Label Distribution
+
+The dataset will contain at least **200 labeled examples** with the following target distribution:
+
+| Label | Target Count |
+|---------|------:|
+| Analysis | 70 |
+| Opinion | 70 |
+| Reaction | 60 |
+
+The exact distribution does not need to be perfectly balanced, but each label should represent at least 20% of the dataset to avoid severe class imbalance.
+
+## Handling Underrepresented Labels
+
+If one label is underrepresented after collecting 200 examples, additional comments will be collected until the label distribution becomes more balanced. Data collection will continue until each label contains enough examples for the model to learn meaningful distinctions.
+
+---
+
+# Evaluation Metrics
+
+## Overall Accuracy
+
+Accuracy measures the percentage of comments classified correctly. It provides a high-level view of performance but does not reveal how well the model performs on individual labels.
+
+## Precision
+
+Precision measures how often the model's predictions for a label are correct.
+
+This is important because a community tool should avoid incorrectly labeling comments. For example, a reaction comment should not frequently be classified as analysis.
+
+## Recall
+
+Recall measures how many examples of a label the model successfully identifies.
+
+This is important because the classifier should not consistently miss one type of discourse.
+
+## F1 Score
+
+F1 score balances precision and recall.
+
+Since the three labels may not appear equally often, F1 score provides a more reliable measure than accuracy alone.
+
+## Confusion Matrix
+
+A confusion matrix will be used to identify which labels are commonly confused with one another.
+
+This is especially important because the largest anticipated source of error is distinguishing **Analysis** from **Opinion**.
+
+---
+
+# Definition of Success
+
+The classifier would be considered genuinely useful if:
+
+- Overall accuracy is at least **80%**.
+- Each label achieves an F1 score of at least **0.75**.
+- No label has a recall below **70%**.
+- Most errors occur between **Analysis** and **Opinion**, which are naturally difficult to separate.
+
+For a real community tool, performance in this range would be good enough to provide useful information about discussion quality without requiring perfect predictions.
+
+---
+
+# Evaluation Criteria
+
+Success criteria are specific and measurable.
+
+At the end of the project, success can be objectively determined by examining:
+
+1. Overall accuracy.
+2. Precision, recall, and F1 scores for each label.
+3. The confusion matrix.
+4. Error analysis on incorrectly classified comments.
+
+These metrics provide clear standards for determining whether the classifier achieved its intended goals.
+
+---
+
+# AI Tool Plan
+
+## Label Stress-Testing
+
+Before annotating the full dataset, AI tools will be used to generate comments that sit at the boundary between two labels.
+
+Examples include:
+
+- Analysis vs. Opinion
+- Opinion vs. Reaction
+
+If generated examples cannot be classified consistently, the label definitions and decision rules will be refined before annotation begins.
+
+## Annotation Assistance
+
+ChatGPT may be used to suggest labels for batches of comments.
+
+However, all labels will be reviewed and assigned manually by myself. AI-generated suggestions will not be accepted without my verification.
+
+Examples that were initially pre-labeled using AI assistance will be tracked separately and disclosed in the AI usage section of the final report.
+
+## Failure Analysis
+
+After evaluation, incorrectly classified comments will be given to ChatGPT to identify possible patterns.
+
+Potential patterns include:
+
+- Confusion between Analysis and Opinion.
+- Short comments being mistaken for reactions.
+- Predictions affected by sarcasm or humor.
+
+Any patterns suggested by AI will be verified manually using the misclassified examples before being included in the final evaluation report.
